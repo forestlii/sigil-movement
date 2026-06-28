@@ -25,6 +25,19 @@ This package depends on the Sigil core package. Install both:
 
 (Package Manager → *Add package from disk…* → each `package.json`.)
 
+### Running tests / 运行测试
+
+The package ships with EditMode + PlayMode tests under `Tests/`. To run them, add the
+package to `"testables"` in your project's `Packages/manifest.json`, then open
+**Window → General → Test Runner**:
+
+```json
+"testables": [ "com.likeon.gas.movement" ]
+```
+
+包内 `Tests/` 自带 EditMode + PlayMode 测试。在工程 `Packages/manifest.json` 的
+`"testables"` 里加上本包，再打开 **Window → General → Test Runner** 即可运行。
+
 ## Features / 功能
 
 - **MovementSystemComponent** — movement-set / state machine, definition stack, rotation modes, input direction. / 移动状态机、定义栈、旋转模式、输入方向。
