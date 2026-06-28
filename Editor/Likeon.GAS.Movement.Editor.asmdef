@@ -1,0 +1,19 @@
+{
+  "name": "Likeon.GAS.Movement.Editor",
+  "rootNamespace": "Likeon.GAS.Editor",
+  "references": [
+    "Likeon.GAS.Runtime",
+    "Likeon.GAS.Movement"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

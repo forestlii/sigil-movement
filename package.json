@@ -1,0 +1,22 @@
+{
+  "name": "com.likeon.gas.movement",
+  "version": "0.1.0",
+  "displayName": "Sigil Movement - Locomotion Companion",
+  "description": "Movement & locomotion companion for Sigil (com.likeon.gas). A GameplayTag-driven movement state machine on a CharacterController, mirrored to the ability system, plus a data-driven locomotion animation layer (in-air state, view-relative aim offset, core-state tags -> Animator) and a sample layered Animator Controller generator. Depends on the Sigil core package. Independent Unity implementation; single-player authoritative.",
+  "unity": "6000.4",
+  "keywords": [
+    "movement",
+    "locomotion",
+    "character controller",
+    "animation",
+    "gameplay tags",
+    "sigil",
+    "gas"
+  ],
+  "author": {
+    "name": "Likeon"
+  },
+  "dependencies": {
+    "com.likeon.gas": "0.2.0"
+  }
+}
