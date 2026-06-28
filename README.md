@@ -2,12 +2,12 @@
 
 > English / 中文.
 
-A **companion package** for [Sigil](../com.likeon.gas) (`com.likeon.gas`) that provides the
+A **companion package** for [Sigil](https://github.com/forestlii/sigil-gas) (`com.likeon.gas`) that provides the
 movement and locomotion layer. Kept separate from the GAS core on purpose: movement is a
 *consumer* of the GameplayTag state bus, not part of the ability system itself — so you can
 use Sigil core with your own movement, or this package with Sigil.
 
-[Sigil](../com.likeon.gas)（`com.likeon.gas`）的**移动配套包**。刻意与 GAS 核心分开：移动是
+[Sigil](https://github.com/forestlii/sigil-gas)（`com.likeon.gas`）的**移动配套包**。刻意与 GAS 核心分开：移动是
 GameplayTag 状态总线的*消费方*，不属于能力系统本身——你可以只用核心配自己的移动，也可以二者搭配。
 
 - **Depends on / 依赖:** `com.likeon.gas` (Sigil core) + `com.unity.inputsystem` (via core)
