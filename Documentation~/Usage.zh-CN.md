@@ -1,5 +1,7 @@
 # Sigil Movement 使用文档
 
+[English](Usage.md) | [简体中文](Usage.zh-CN.md)
+
 > 移动与运动动画**配套包** `com.likeon.gas.movement`。依赖 Sigil 核心包 `com.likeon.gas`（GitHub: [sigil-gas](https://github.com/forestlii/sigil-gas)）。命名空间不变（`Likeon.GAS`）。
 >
 > 设计定位：移动是 GameplayTag 状态总线的**消费方**，不属于能力系统本身——所以它单独成包。你可以只用核心配自己的移动，也可以装这个包获得开箱即用的移动 + 运动动画数据层。
