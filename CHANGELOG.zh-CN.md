@@ -7,6 +7,10 @@
 
 ## [未发布]
 
+### 新增
+
+- **移动 / 视角输入处理器**（`InputProcessor_Move`、`InputProcessor_Look`）——把核心 GIPS 输入系统（`InputSystemComponent` + `InputProcessor`）桥接到本包的移动与相机，让移动/视角输入也走输入系统（而非旁路）。`InputProcessor_Move` 把 2D 移动轴转成相机相对的世界方向喂 `MovementSystemComponent.SetInputDirection`；`InputProcessor_Look` 驱动第三人称相机的 `AddLookInput`。在 `InputControlSetup` 里把它们配到 Move/Look 输入标签上。（放本包而非 GAS 核心，让核心保持与移动无关。）
+
 ### 变更
 
 - 测试迁入包内 `Tests/` 目录（PlayMode + EditMode），随包发布，用户加 `"testables"` 即可运行。
