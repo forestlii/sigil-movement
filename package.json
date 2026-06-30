@@ -18,5 +18,12 @@
   },
   "dependencies": {
     "com.likeon.gas": "0.2.0"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Movement Demo",
+      "description": "Walk around with WASD + mouse look on a third-person character — input flows through the GIPS input system (InputProcessor_Move / InputProcessor_Look). Run 'Likeon ▸ GAS ▸ Samples ▸ Build Movement Demo Scene' after importing to generate the playable scene.",
+      "path": "Samples~/MovementDemo"
+    }
+  ]
 }

@@ -1,0 +1,21 @@
+{
+    "name": "Sigil.Movement.Sample.MovementDemo.Editor",
+    "rootNamespace": "Likeon.GAS.Sample.MovementDemo.Editor",
+    "references": [
+        "Sigil.Movement.Sample.MovementDemo",
+        "Likeon.GAS.Movement",
+        "Likeon.GAS.Runtime",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
