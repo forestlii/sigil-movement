@@ -7,15 +7,17 @@
 
 ## 怎么跑
 
-本示例是**生成器型**——只随包发脚本 + 一个 `.inputactions` 资产，场景按需生成，
-**跑生成器之前没有现成的场景文件**：
+本示例随包发**烘好的场景 + 玩家 prefab**——直接：
 
-1. 菜单 **Likeon ▸ GAS ▸ Samples ▸ Build Movement Demo Scene**。
-2. 它会在**本文件夹里**生成 **`MovementDemo.unity`** 和三个资产——`MovementDemo_InputConfig`、
-   `MovementDemo_InputControlSetup`、`MovementDemo_MovementDef`（Console 会打印确切路径：
-   `[MovementDemo] 已生成场景与资产：…`）。
-3. 打开生成的 **`MovementDemo.unity`** 按 **Play**。
-4. 操作：**WASD** 移动 · **鼠标** 看。（走 / 跑 / 冲刺速度在生成的 `MovementDef` 里。）
+1. 打开**本文件夹里的 `MovementDemo.unity`**。
+2. 按 **Play**。
+3. 操作：**WASD** 移动 · **鼠标** 看 · **1 / 2 / 3** 走 / 跑 / 冲刺 · **Esc** 释放鼠标。
+
+### 重新烘（可选）
+
+场景、`Resources/` 下的 `MovementDemoPlayer` prefab、以及三个配置资产（`MovementDemo_InputConfig`、
+`MovementDemo_InputControlSetup`、`MovementDemo_MovementDef`）由编辑器脚本生成。想重新生成（比如你改了
+`.inputactions`），跑菜单 **Likeon ▸ GAS ▸ Samples ▸ Build Movement Demo Scene**（幂等；Console 会打印输出路径）。
 
 ## 它演示什么
 

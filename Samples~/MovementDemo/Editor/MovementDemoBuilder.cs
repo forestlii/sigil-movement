@@ -1,7 +1,8 @@
 // Copyright (c) 2026 Likeon. Licensed under the MIT License.
-// Movement Demo 场景生成器：程序化产出 InputConfig / InputControlSetup / MovementDefinition 资产
-// 与一个可直接 Play 的 MovementDemo.unity 场景（玩家 + 第三人称相机 + 地面）。
-// 把 Move/Look 输入处理器接到输入系统、配置接到组件——演示"输入经 GIPS → 移动/相机"。
+// Movement Demo 生成器：程序化产出 InputConfig / InputControlSetup / MovementDefinition 资产 +
+// 一个 Player prefab（Resources/）+ 一个可直接 Play 的 MovementDemo.unity 场景（玩家实例 + 第三人称相机 + 地面）。
+// prefab 化：结构（组件 + 输入/移动配置资产引用）烘进 prefab；跨边界引用（Mover.viewReference = 相机）在场景级接。
+// 菜单：Likeon ▸ GAS ▸ Samples ▸ Build Movement Demo Scene（重跑幂等）。
 
 using System.Collections.Generic;
 using System.Linq;
@@ -34,13 +35,12 @@ namespace Likeon.GAS.Sample.MovementDemo.Editor
             var tMove = GameplayTag.RequestTag("InputTag.Move");
             var tLook = GameplayTag.RequestTag("InputTag.Look");
 
-            // 3) InputConfig：InputTag ↔ InputAction
+            // 3) 配置资产：InputConfig / InputControlSetup / MovementDefinition
             var config = ScriptableObject.CreateInstance<InputConfig>();
             config.InputActionMappings.Add(new InputActionMapping { InputTag = tMove, Action = moveRef, ValueBinding = true });
             config.InputActionMappings.Add(new InputActionMapping { InputTag = tLook, Action = lookRef, ValueBinding = true });
             CreateAsset(config, dir + "/MovementDemo_InputConfig.asset");
 
-            // 4) InputControlSetup：挂 Move / Look 处理器
             var setup = ScriptableObject.CreateInstance<InputControlSetup>();
             setup.ExecutionType = EInputProcessorExecutionType.MatchAll;
             var move = new InputProcessor_Move { CameraRelative = true };
@@ -53,7 +53,6 @@ namespace Likeon.GAS.Sample.MovementDemo.Editor
             setup.AddProcessor(look);
             CreateAsset(setup, dir + "/MovementDemo_InputControlSetup.asset");
 
-            // 5) MovementDefinition：一组 走/跑/冲刺 速度
             var def = ScriptableObject.CreateInstance<MovementDefinition>();
             var moveSet = new MovementSetSetting { MovementSet = GameplayTag.None };
             moveSet.States.Add(MovementStateSetting.Default(MovementTags.MovementState_Walk, 1.5f));
@@ -62,23 +61,51 @@ namespace Likeon.GAS.Sample.MovementDemo.Editor
             def.MovementSets.Add(moveSet);
             CreateAsset(def, dir + "/MovementDemo_MovementDef.asset");
 
-            // 6) 建场景
+            // 4) Player prefab（结构 + 输入/移动配置；viewReference 留场景接）→ 放 Resources/
+            string resDir = dir + "/Resources";
+            if (!AssetDatabase.IsValidFolder(resDir)) AssetDatabase.CreateFolder(dir, "Resources");
+            var playerObj = BuildPlayer(config, setup, def);
+            string prefabPath = resDir + "/MovementDemoPlayer.prefab";
+            var prefab = PrefabUtility.SaveAsPrefabAsset(playerObj, prefabPath);
+            Object.DestroyImmediate(playerObj);
+
+            // 5) 场景：地面 + 光 + 玩家 prefab 实例 + 第三人称相机（相机↔玩家在场景级互引）
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // 地面
             var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
             ground.name = "Ground";
             ground.transform.localScale = new Vector3(5f, 1f, 5f);
 
-            // 光
             var lightGo = new GameObject("Directional Light");
             var light = lightGo.AddComponent<Light>();
             light.type = LightType.Directional;
             lightGo.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
 
-            // 玩家
-            var player = new GameObject("Player");
+            var player = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
             player.transform.position = new Vector3(0f, 0.1f, 0f);
+
+            var camGo = new GameObject("Main Camera") { tag = "MainCamera" };
+            var cam = camGo.AddComponent<Camera>();
+            camGo.AddComponent<AudioListener>();
+            var camSys = camGo.AddComponent<CameraSystemComponent>();
+            camSys.Configure(cam, player.transform);
+            camGo.transform.position = new Vector3(0f, 3f, -5f);
+
+            // 跨边界：玩家的视角参考 = 场景相机（prefab 内接不了，场景级接）
+            WireMoverView(player.GetComponent<CharacterMovementSystemComponent>(), camGo.transform);
+
+            string scenePath = dir + "/MovementDemo.unity";
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene, scenePath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log($"[MovementDemo] 已生成 prefab + 场景 + 配置资产：{prefabPath} / {scenePath}");
+        }
+
+        // 玩家结构：组件 + 可视胶囊子物体 + 输入/移动配置引用（viewReference 留空，场景接）
+        private static GameObject BuildPlayer(InputConfig config, InputControlSetup setup, MovementDefinition def)
+        {
+            var player = new GameObject("Player");
             var cc = player.AddComponent<CharacterController>();
             cc.height = 2f; cc.radius = 0.4f; cc.center = new Vector3(0f, 1f, 0f);
             player.AddComponent<AbilitySystemComponent>();
@@ -93,26 +120,9 @@ namespace Likeon.GAS.Sample.MovementDemo.Editor
             vis.transform.SetParent(player.transform, false);
             vis.transform.localPosition = new Vector3(0f, 1f, 0f);
 
-            // 相机（第三人称）
-            var camGo = new GameObject("Main Camera");
-            camGo.tag = "MainCamera";
-            var cam = camGo.AddComponent<Camera>();
-            camGo.AddComponent<AudioListener>();
-            var camSys = camGo.AddComponent<CameraSystemComponent>();
-            camSys.Configure(cam, player.transform);
-            camGo.transform.position = new Vector3(0f, 3f, -5f);
-
-            // 接线（私有 SerializeField 经 SerializedObject）
             WireInputSystem(ic, config, setup);
-            WireMover(mover, def, camGo.transform);
-
-            // 保存
-            string scenePath = dir + "/MovementDemo.unity";
-            EditorSceneManager.MarkSceneDirty(scene);
-            EditorSceneManager.SaveScene(scene, scenePath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Debug.Log($"[MovementDemo] 已生成场景与资产：{scenePath}");
+            WireMoverDefs(mover, def);
+            return player;
         }
 
         private static void WireInputSystem(InputSystemComponent ic, InputConfig config, InputControlSetup setup)
@@ -125,12 +135,18 @@ namespace Likeon.GAS.Sample.MovementDemo.Editor
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static void WireMover(CharacterMovementSystemComponent mover, MovementDefinition def, Transform view)
+        private static void WireMoverDefs(CharacterMovementSystemComponent mover, MovementDefinition def)
         {
             var so = new SerializedObject(mover);
             var defs = so.FindProperty("movementDefinitions");
             defs.arraySize = 1;
             defs.GetArrayElementAtIndex(0).objectReferenceValue = def;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void WireMoverView(CharacterMovementSystemComponent mover, Transform view)
+        {
+            var so = new SerializedObject(mover);
             var viewProp = so.FindProperty("viewReference");
             if (viewProp != null) viewProp.objectReferenceValue = view;
             so.ApplyModifiedPropertiesWithoutUndo();

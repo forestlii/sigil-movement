@@ -10,7 +10,7 @@
 ### 新增
 
 - **移动 / 视角输入处理器**（`InputProcessor_Move`、`InputProcessor_Look`）——把核心 GIPS 输入系统（`InputSystemComponent` + `InputProcessor`）桥接到本包的移动与相机，让移动/视角输入也走输入系统（而非旁路）。`InputProcessor_Move` 把 2D 移动轴转成相机相对的世界方向喂 `MovementSystemComponent.SetInputDirection`；`InputProcessor_Look` 驱动第三人称相机的 `AddLookInput`。在 `InputControlSetup` 里把它们配到 Move/Look 输入标签上。（放本包而非 GAS 核心，让核心保持与移动无关。）
-- **Movement Demo 示例**——建在 GAS 核心 + 本包之上的第三人称走动 demo，演示输入走完整 GIPS 链（随包带 `.inputactions`：WASD Move + 鼠标 Look → `InputConfig` → 挂 Move/Look 处理器的 `InputControlSetup` → 移动/相机）。导入示例后，跑 **Likeon ▸ GAS ▸ Samples ▸ Build Movement Demo Scene** 生成可玩场景（玩家 + 第三人称相机 + 地面）与配置资产。
+- **Movement Demo 示例**——建在 GAS 核心 + 本包之上的第三人称走动 demo，演示输入走完整 GIPS 链（随包带 `.inputactions`：WASD Move + 鼠标 Look → `InputConfig` → 挂 Move/Look 处理器的 `InputControlSetup` → 移动/相机）。**以烘好的场景 + 玩家 prefab 交付**：导入示例、打开 `MovementDemo.unity` 按 Play（WASD 移动 · 鼠标看 · 1/2/3 走/跑/冲刺）。场景、`Resources/` 下的 `MovementDemoPlayer` prefab 和三个配置资产由编辑器脚本生成——想重烘跑 **Likeon ▸ GAS ▸ Samples ▸ Build Movement Demo Scene**。含 README 和一个 PlayMode 冒烟测试。
 
 ### 变更
 

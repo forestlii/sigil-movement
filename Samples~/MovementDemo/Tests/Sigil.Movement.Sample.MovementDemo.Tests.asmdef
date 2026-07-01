@@ -1,0 +1,30 @@
+{
+  "name": "Sigil.Movement.Sample.MovementDemo.Tests",
+  "rootNamespace": "Likeon.GAS.Sample.MovementDemo.Tests",
+  "references": [
+    "Likeon.GAS.Runtime",
+    "Likeon.GAS.Movement",
+    "Sigil.Movement.Sample.MovementDemo",
+    "UnityEngine.TestRunner"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS",
+    "SIGIL_HAS_TEST_FRAMEWORK"
+  ],
+  "versionDefines": [
+    {
+      "name": "com.unity.test-framework",
+      "expression": "",
+      "define": "SIGIL_HAS_TEST_FRAMEWORK"
+    }
+  ],
+  "noEngineReferences": false
+}
